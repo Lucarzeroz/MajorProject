@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import com.vishnusivadas.advanced_httpurlconnection.PutData;
 public class signup extends AppCompatActivity {
 
     public static final String Getusername = "com.example.application.example.Getusername";
+    public static final String URL2 = "http://100.26.167.84/Register.php";
 
     TextInputEditText textInputEditTextFullname, textInputEditTextUsername, textInputEditTextPassword, textInputEditTextEmail;
     Button signupbtn;
@@ -75,7 +77,7 @@ public class signup extends AppCompatActivity {
                             data[1] = Username;
                             data[2] = Password;
                             data[3] = Email;
-                            PutData putData = new PutData("http://192.168.50.200/MP/Register.php", "POST", field, data);
+                            PutData putData = new PutData(URL2, "POST", field, data);
                             if (putData.startPut()) {
                                 if (putData.onComplete()) {
                                     progressBar.setVisibility(View.GONE);

@@ -1,76 +1,264 @@
+//package com.example.scammagram40;
+//
+//import android.Manifest;
+//import android.content.IntentFilter;
+//import android.content.pm.PackageManager;
+//import android.os.Bundle;
+//import android.widget.Toast;
+//
+//import androidx.annotation.NonNull;
+//import androidx.appcompat.app.AppCompatActivity;
+//import androidx.core.app.ActivityCompat;
+//import androidx.core.content.ContextCompat;
+//
+//import com.example.scammagram40.R;
+//import com.example.scammagram40.SmsReceiver;
+//
+//public class MainActivity extends AppCompatActivity {
+//
+//    private SmsReceiver mSmsReceiver;
+//    private static final int MY_PERMISSIONS_REQUEST_READ_SMS = 1;
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+//
+//        // Register the SMS receiver
+//        mSmsReceiver = new SmsReceiver();
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction("android.provider.Telephony.SMS_RECEIVED");
+//        registerReceiver(mSmsReceiver, intentFilter);
+//
+//
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            // Request permission from the user
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{Manifest.permission.READ_SMS},
+//                    MY_PERMISSIONS_REQUEST_READ_SMS);
+//        }
+//
+//
+//    }
+//
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        // Handle the permission request result
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == MY_PERMISSIONS_REQUEST_READ_SMS) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                // Permission was granted
+//                // Do something with the SMS messages
+//                Toast.makeText(this, "Access granted!", Toast.LENGTH_SHORT).show();
+//                // ...
+//            } else {
+//                // Permission was denied
+//                // Show a message to the user explaining why the app needs this permission
+//                Toast.makeText(this, "Access not granted.", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
+//
+//
+//
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        // Unregister the SMS receiver
+//        unregisterReceiver(mSmsReceiver);
+//    }
+//}
+//
 package com.example.majorproject;
-
+import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Switch;
+import android.Manifest;
+import com.example.majorproject.CallReceiver;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
-import com.example.majorproject.databinding.ActivityMainBinding;
 
-import android.view.Menu;
-import android.view.MenuItem;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+
+
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+    private SmsReceiver mSmsReceiver;
+    private CallReceiver mCallReceiver;
+    //    private static final int MY_PERMISSIONS_REQUEST_READ_SMS = 1;
+    private static final int REQUEST_READ_AND_RECEIVE_SMS = 1;
+
+    private static final int REQUEST_READ_CONTACTS = 2;
+    private static final int REQUEST_READ_PHONE_STATE = 3;
+    private boolean isSmsReceiverRegistered = false;
+    private boolean isCallReceiverRegistered = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbar);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
+
+        Button button = findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, MessageScanner.class);
+                startActivity(intent);
             }
         });
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.RECEIVE_SMS)
+                        != PackageManager.PERMISSION_GRANTED) {
+            // At least one permission is not granted, so request them
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_SMS, Manifest.permission.RECEIVE_SMS},
+                    REQUEST_READ_AND_RECEIVE_SMS);
         }
 
-        return super.onOptionsItemSelected(item);
+        Switch mySwitch2 = findViewById(R.id.switch1);
+        mySwitch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The switch is turned on
+                    Toast.makeText(MainActivity.this, "Call Listening turned ON", Toast.LENGTH_SHORT).show();
+                    if(!isCallReceiverRegistered) {
+                        mCallReceiver = new CallReceiver();
+                        IntentFilter intentFilter = new IntentFilter();
+                        intentFilter.addAction("android.intent.action.PHONE_STATE");
+                        registerReceiver(mCallReceiver, intentFilter);
+                        isCallReceiverRegistered = true;
+                    }
+                    //check contact permissions in case of exceptions
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_READ_PHONE_STATE);
+                    } else {
+
+
+                        //Permission to read contacts is already granted, so proceed with the action
+//                            Toast.makeText(MainActivity.this, "Contacts acccess granted", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Call listening turned OFF", Toast.LENGTH_SHORT).show();
+                    // The switch is turned off
+                    if(isCallReceiverRegistered) {
+                        unregisterReceiver(mCallReceiver);
+                        isCallReceiverRegistered = false;
+                    }
+                }
+            }
+        });
+
+
+
+
+
+        Switch mySwitch = findViewById(R.id.switch3);
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The switch is turned on
+                    Toast.makeText(MainActivity.this, "Sms Listening turned ON", Toast.LENGTH_SHORT).show();
+                    if(!isSmsReceiverRegistered) {
+                        mSmsReceiver = new SmsReceiver();
+                        IntentFilter intentFilter = new IntentFilter();
+                        intentFilter.addAction("android.provider.Telephony.SMS_RECEIVED");
+                        registerReceiver(mSmsReceiver, intentFilter);
+                        isSmsReceiverRegistered = true;
+                    }
+                    //check contact permissions in case of exceptions
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_READ_CONTACTS);
+                    } else {
+
+
+                        //Permission to read contacts is already granted, so proceed with the action
+//                            Toast.makeText(MainActivity.this, "Contacts acccess granted", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Sms listening turned OFF", Toast.LENGTH_SHORT).show();
+                    // The switch is turned off
+                    if(isSmsReceiverRegistered) {
+                        unregisterReceiver(mSmsReceiver);
+                        isSmsReceiverRegistered = false;
+                    }
+                }
+            }
+        });
+
     }
 
+
+
+
+
+
     @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_READ_AND_RECEIVE_SMS) {
+            // If the request is cancelled, the result arrays are empty
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                // Both permissions were granted, so proceed with the action
+                // (for example, register the SMS receiver)
+                Toast.makeText(this, "Read and receive SMS permissions were granted", Toast.LENGTH_SHORT).show();
+
+
+
+
+
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_READ_CONTACTS);
+                } else {
+
+
+                    //Permission to read contacts is already granted, so proceed with the action
+//                            Toast.makeText(MainActivity.this, "Contacts acccess granted", Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
+
+            } else {
+                // At least one permission was not granted, so show a message
+                // to the user explaining why the action is not possible
+                Toast.makeText(this, "Read and receive SMS permissions are required to do this action", Toast.LENGTH_SHORT).show();
+            }
+
+
+
+
+
+
+
+
+
+        }
     }
+
 }

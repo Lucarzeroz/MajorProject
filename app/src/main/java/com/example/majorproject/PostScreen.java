@@ -121,7 +121,7 @@ public class PostScreen extends AppCompatActivity {
                                 data[2] = contents;
                                 data[3] = base64Image;
                                 data[4] = numoflikes;
-                                PutData putData = new PutData("http://192.168.50.200/MP/Postpost.php", "POST", field, data);
+                                PutData putData = new PutData("http://172.30.83.158/MP/Postpost.php", "POST", field, data);
                                 if (putData.startPut()) {
                                     if (putData.onComplete()) {
                                         String result = putData.getResult();

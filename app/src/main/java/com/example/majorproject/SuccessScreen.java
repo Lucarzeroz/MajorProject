@@ -27,7 +27,7 @@ public class SuccessScreen extends AppCompatActivity implements PopupMenu.OnMenu
     public static final String updatedUsername = "Updated Username";
 
 
-    Button btnlogout, AddPostBtn, SettingsBtn;
+    Button btnlogout, AddPostBtn, SettingsBtn, ScannerBtn;
     ImageView redirectToGuide;
 
     //to make to popup menu appear when the hamburger menu is pressed
@@ -77,6 +77,7 @@ public class SuccessScreen extends AppCompatActivity implements PopupMenu.OnMenu
         AddPostBtn = findViewById(R.id.redirectToPostbtn);
         SettingsBtn = findViewById(R.id.redirectToUserbtn);
         redirectToGuide = findViewById(R.id.redirectToGuideBtn2);
+        ScannerBtn = findViewById(R.id.scannerBtn);
 
         Intent intent = getIntent();
         String username = intent.getStringExtra(signup.Getusername);
@@ -128,6 +129,15 @@ public class SuccessScreen extends AppCompatActivity implements PopupMenu.OnMenu
             public void onClick(View view) {
                 Intent intent4 = new Intent(getBaseContext(), UserSettings.class);
                 startActivity(intent4);
+                finish();
+            }
+        });
+
+        ScannerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent5 = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(intent5);
                 finish();
             }
         });
