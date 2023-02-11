@@ -83,6 +83,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Switch;
@@ -111,16 +112,65 @@ public class MainActivity extends AppCompatActivity {
     private boolean isSmsReceiverRegistered = false;
     private boolean isCallReceiverRegistered = false;
 
+    ImageView guide, scanner, home, post, settings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
-
+        guide = findViewById(R.id.redirectToGuideBtn3);
+        scanner = findViewById(R.id.redirectToScannerBtn2);
+        home = findViewById(R.id.homebtn2);
+        post = findViewById(R.id.redirectToPostImageBtn2);
+        settings = findViewById(R.id.redirectToSettingsBtn2);
         Button button = findViewById(R.id.button);
+
+        guide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent2 = new Intent(getBaseContext(), Guides.class);
+                startActivity(intent2);
+                finish();
+            }
+        });
+
+        scanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent2 = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(intent2);
+                finish();
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent2 = new Intent(getBaseContext(), SuccessScreen.class);
+                startActivity(intent2);
+                finish();
+            }
+        });
+
+        post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent2 = new Intent(getBaseContext(), PostScreen.class);
+                startActivity(intent2);
+                finish();
+            }
+        });
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent2 = new Intent(getBaseContext(), UserSettings.class);
+                startActivity(intent2);
+                finish();
+            }
+        });
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,10 +220,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
 
         Switch mySwitch = findViewById(R.id.switch3);
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

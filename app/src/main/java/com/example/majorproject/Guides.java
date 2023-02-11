@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 public class Guides extends AppCompatActivity {
 
-    ImageView redirectToGuide, redirectToPost, redirectToUser;
+    ImageView redirectToGuide, redirecToScanner, redirectToPost, redirectToSettings, redirectToHome;
     TextView HowToIdentifyScamText, DiffTypesOfScamsText;
 
     @Override
@@ -18,9 +18,11 @@ public class Guides extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guides);
 
-        redirectToGuide = findViewById(R.id.redirectToGuideBtn);
-        redirectToPost = findViewById(R.id.redirectToPostBtn2);
-        redirectToUser = findViewById(R.id.redirectToUserBtn2);
+        redirectToGuide = findViewById(R.id.redirectToGuideBtn5);
+        redirecToScanner = findViewById(R.id.redirectToScannerBtn4);
+        redirectToPost = findViewById(R.id.redirectToPostImageBtn4);
+        redirectToSettings = findViewById(R.id.redirectToSettingsBtn4);
+        redirectToHome = findViewById(R.id.homebtn3);
         HowToIdentifyScamText = findViewById(R.id.howToIdentifyScamsText);
         DiffTypesOfScamsText = findViewById(R.id.DifferentTypesOfScamsText);
 
@@ -42,11 +44,29 @@ public class Guides extends AppCompatActivity {
             }
         });
 
-        redirectToUser.setOnClickListener(new View.OnClickListener() {
+        redirectToSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent3 = new Intent(getBaseContext(), UserSettings.class);
                 startActivity(intent3);
+                finish();
+            }
+        });
+
+        redirectToHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent6 = new Intent(getBaseContext(), SuccessScreen.class);
+                startActivity(intent6);
+                finish();
+            }
+        });
+
+        redirecToScanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent6 = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(intent6);
                 finish();
             }
         });

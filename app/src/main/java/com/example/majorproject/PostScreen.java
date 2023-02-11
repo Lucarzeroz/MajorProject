@@ -26,16 +26,17 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.vishnusivadas.advanced_httpurlconnection.PutData;
 
+import org.w3c.dom.Text;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class PostScreen extends AppCompatActivity {
 
-    TextView usernameText;
     TextInputEditText PostTitle, PostContents;
     Button PostBtn;
-    ImageView uploadImgBtn;
+    ImageView uploadImgBtn, backbtn;
     Bitmap bitmap;
 
     @Override
@@ -43,22 +44,16 @@ public class PostScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_screen);
 
-        usernameText = findViewById(R.id.usernametext);
         PostTitle = findViewById(R.id.postTitle);
         PostContents = findViewById(R.id.postContent);
         PostBtn = findViewById(R.id.PostBtn);
         uploadImgBtn = findViewById(R.id.uploadImgBtn);
+        backbtn = findViewById(R.id.backbtn);
 
-
-        Intent intent = getIntent();
-        String loggedinusername = intent.getStringExtra(login.Getusername);
-        TextView welcomeuser = (TextView) findViewById(R.id.usernametext);
-        welcomeuser.setText(loggedinusername);
-
-        Intent intent3 = getIntent();
-        String updatedLoggedInUsername = intent3.getStringExtra(SuccessScreen.updatedUsername);
-        TextView updatedUsername = (TextView) findViewById(R.id.UpdatedUsernameText);
-        updatedUsername.setText(updatedLoggedInUsername);
+        Intent togetusername = getIntent();
+        String Fetchusername = togetusername.getStringExtra(SuccessScreen.UsernameLoggedin);
+        TextView usernametobedisplayed = (TextView) findViewById(R.id.usernametext);
+        usernametobedisplayed.setText(Fetchusername);
 
         ActivityResultLauncher<Intent> activityResultLauncher =
                 registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -77,6 +72,15 @@ public class PostScreen extends AppCompatActivity {
                     }
                 });
 
+        backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent5 = new Intent(getBaseContext(), SuccessScreen.class);
+                startActivity(intent5);
+                finish();
+            }
+        });
+
         uploadImgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,8 +94,7 @@ public class PostScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String username, title, contents, numoflikes;
-                username = String.valueOf(loggedinusername);
+                String title, contents, numoflikes;
                 title = String.valueOf(PostTitle.getText());
                 contents = String.valueOf(PostContents.getText());
                 Integer likes = Integer.valueOf("0");
@@ -116,12 +119,12 @@ public class PostScreen extends AppCompatActivity {
                                 field[3] = "img_path";
                                 field[4] = "likes";
                                 String[] data = new String[5];
-                                data[0] = username;
+                                data[0] = Fetchusername;
                                 data[1] = title;
                                 data[2] = contents;
                                 data[3] = base64Image;
                                 data[4] = numoflikes;
-                                PutData putData = new PutData("http://172.30.83.158/MP/Postpost.php", "POST", field, data);
+                                PutData putData = new PutData("http://192.168.50.200/MP/Postpost.php", "POST", field, data);
                                 if (putData.startPut()) {
                                     if (putData.onComplete()) {
                                         String result = putData.getResult();

@@ -6,6 +6,9 @@
     <item android:id="@+id/Posts"
         android:title="Posts">
     </item>
+    <item android:id="@+id/Scanner"
+        android:title="Scanner">
+    </item>
     <item android:id="@+id/Settings"
         android:title="Settings">
     </item>

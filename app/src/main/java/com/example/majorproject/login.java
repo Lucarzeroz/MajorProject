@@ -20,7 +20,7 @@ import java.net.URLConnection;
 public class login extends AppCompatActivity {
 
     public static final String Getusername = "com.example.application.example.Getusername";
-    public static final String URL = "http://100.26.167.84/login.php";
+    public static final String URL = "http://192.168.50.200/MP/Login.php";
 
     TextInputEditText LoginUsername, LoginPassword;
     Button loginbtn;
